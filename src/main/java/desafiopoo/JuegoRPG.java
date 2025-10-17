@@ -1,4 +1,4 @@
-package desafioPOO;
+package desafiopoo;
 
 public class JuegoRPG {
     Jugador jugador;

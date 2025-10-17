@@ -1,4 +1,4 @@
-package desafioPOO;
+package desafiopoo;
 
 import java.util.List;
 
