@@ -1,4 +1,4 @@
-package desafiocodeacademy;
+package desafiocodeacademy.dominio;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ public class Alumno {
     private String nombre;
 
     //Constructor 1 para un alumno con 5 examenes
-    public Alumno (String nombre, Random random) {
+    public Alumno(String nombre, Random random) {
         this.nombre = nombre;
         this.examenes = new ArrayList<>();
         int limite = 101;
@@ -22,13 +22,13 @@ public class Alumno {
         this.examenes.add(new Examen(2, nota2));
         this.examenes.add(new Examen(3, nota3));
 
-        if (nota2 < 60){
+        if (nota2 < 60) {
             this.examenes.add(new Examen(4, 100));
         } else {
             this.examenes.add(new Examen(4, nota2));
         }
 
-        if ( nota1 + nota3 >= 150) {
+        if (nota1 + nota3 >= 150) {
             this.examenes.add(new Examen(5, 95));
         } else {
             this.examenes.add(new Examen(5, 70));
@@ -63,7 +63,7 @@ public class Alumno {
         }
 
 
-        for (Examen e: examenes) {
+        for (Examen e : examenes) {
             if (!e.esAprobado()) {
                 return false;
             }
@@ -73,7 +73,7 @@ public class Alumno {
 
     public boolean aproboAlguno() {
 
-        for (Examen e: examenes) {
+        for (Examen e : examenes) {
             if (e.esAprobado()) {
                 return true;
             }
@@ -110,7 +110,7 @@ public class Alumno {
     }
 
 
-    public String mejoraProgresiva(){
+    public String mejoraProgresiva() {
         for (int i = 0; i < examenes.size() - 1; i++) {
             int notaActual = examenes.get(i).getNota();
             int notaSiguiente = examenes.get(i + 1).getNota();
@@ -180,10 +180,10 @@ public class Alumno {
     }
 
     //Acumula la diferencia entre notas consecutivas para luego comparar con otros alumnos
-    public int menorDiferencia () {
+    public int menorDiferencia() {
 
         int acumDif = 0;
-        for (int i = 0; i < examenes.size() -1; i++) {
+        for (int i = 0; i < examenes.size() - 1; i++) {
             int notaActual = examenes.get(i).getNota();
             int notaSiguiente = examenes.get(i + 1).getNota();
 
@@ -192,13 +192,10 @@ public class Alumno {
         return acumDif;
     }
 
-    public int notaTercerExamen(){
+    public int notaTercerExamen() {
         if (examenes.size() < 3) {
             return -1; // Indica que no hay tercer examen
         }
         return examenes.get(2).getNota();
     }
-
-
-
 }

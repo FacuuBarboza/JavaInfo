@@ -1,10 +1,11 @@
-package desafiopoo.dominio;
+package desafiopoo;
+
+import desafiopoo.dominio.JuegoRPG;
+import desafiopoo.dominio.Jugador;
+import desafiopoo.dominio.Mision;
 
 import java.util.ArrayList;
 import java.util.List;
-import desafiopoo.JuegoRPG;
-import desafiopoo.Jugador;
-import desafiopoo.Mision;
 
 public class ChadQuestRPG {
     public static void main(String[] args) {

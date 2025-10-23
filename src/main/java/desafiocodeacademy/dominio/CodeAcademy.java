@@ -1,4 +1,4 @@
-package desafiocodeacademy;
+package desafiocodeacademy.dominio;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,8 +91,4 @@ public class CodeAcademy {
         }
         System.out.println("El peor desempeño en el 3er examen es del " + peorAlumno.getNombre() + " con una nota de " + peorNota);
     }
-
-
-
-
 }

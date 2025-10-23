@@ -1,4 +1,4 @@
-package desafiopoo;
+package desafiopoo.dominio;
 
 import java.util.List;
 

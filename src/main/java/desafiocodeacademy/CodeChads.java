@@ -1,7 +1,7 @@
-package desafiocodeacademy.dominio;
-import desafiocodeacademy.Alumno;
-import desafiocodeacademy.Examen;
-import desafiocodeacademy.CodeAcademy;
+package desafiocodeacademy;
+
+import desafiocodeacademy.dominio.Alumno;
+import desafiocodeacademy.dominio.CodeAcademy;
 
 import java.util.Random;
 import java.util.Scanner;

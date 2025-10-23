@@ -1,6 +1,4 @@
-package desafiocodeacademy;
-
-import java.util.Random;
+package desafiocodeacademy.dominio;
 
 public class Examen {
 
@@ -23,9 +21,6 @@ public class Examen {
     public boolean esAprobado() {
         return this.nota >= 60;
     }
-
-
-
 //    public boolean esFallida() {
 //        return this.getPuntos() == 0;
 //    }
