@@ -42,15 +42,7 @@ public class ExperimentoRepository implements ExperimentoRepositoryI {
                 .findFirst();
     }
 
-    /**
-     * Encuentra experimentos con duración mayor o igual a minDuracion (en minutos).
-    public List<Experimento> encontrarConDuracionMinima(int minDuracion) {
-        return dExperimentos.stream()
-                .filter(e -> e.getDuracionMinutos() >= minDuracion)
-                .collect(Collectors.toList());
-    }
-     */
-
+  
     @Override
     public synchronized int size() {
         return dExperimentos.size();
