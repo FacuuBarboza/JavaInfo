@@ -1,20 +1,17 @@
-package tpijava.service;
+package tpijava.org.laboratorio.service;
 
-import tpijava.domain.Experimento;
-import tpijava.domain.Investigador;
-import tpijava.dto.ReporteDTO;
+import tpijava.org.laboratorio.domain.Experimento;
+import tpijava.org.laboratorio.dto.ReporteDTO;
 
 import java.util.List;
 import java.util.Map;
 
-public interface LaboratorioServiceI {
-    boolean registrarInvestigador(String nombre, int edad);
+public interface ExperimentoServiceI {
+
     boolean registrarExpQuimico(String nombreExp, int duracionMinutos, boolean resultado, String tipoReactivo, String investigadorNombre);
     boolean registrarExpFisico(String nombreExp, int duracionMinutos, boolean resultado, String instrumento, List<String> investigadoresNombres);
-
     List<Experimento> getTodosLosExperimentos();
     ReporteDTO getEstadisticasGenerales();
     Experimento getExperimentoMayorDuracion();
-    Investigador getInvestigadorConMasExperimentos();
     Map<String, Integer> getTotalesExitoFallo();
 }

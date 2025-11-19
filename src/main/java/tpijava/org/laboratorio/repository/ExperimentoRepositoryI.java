@@ -1,6 +1,6 @@
-package tpijava.repository;
+package tpijava.org.laboratorio.repository;
 
-import tpijava.domain.Experimento;
+import tpijava.org.laboratorio.domain.Experimento;
 
 import java.util.List;
 import java.util.Optional;

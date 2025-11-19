@@ -1,4 +1,4 @@
-package tpijava.domain;
+package tpijava.org.laboratorio.domain;
 
 public class ExperimentoQuimico extends Experimento {
     private String tipoReactivo;

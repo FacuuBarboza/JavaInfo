@@ -1,4 +1,4 @@
-package tpijava.domain;
+package tpijava.org.laboratorio.domain;
 
 public abstract class Experimento {
     private String nombre;

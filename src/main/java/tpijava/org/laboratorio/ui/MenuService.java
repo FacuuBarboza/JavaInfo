@@ -1,45 +1,38 @@
-package tpijava;
+package tpijava.org.laboratorio.ui;
 
-import tpijava.domain.Experimento;
-import tpijava.domain.ExperimentoFisico;
-import tpijava.domain.ExperimentoQuimico;
-import tpijava.domain.Investigador;
-import tpijava.dto.ReporteDTO;
-import tpijava.repository.ExperimentoRepository;
-import tpijava.repository.ExperimentoRepositoryI;
-import tpijava.repository.InvestigadorRepository;
-import tpijava.repository.InvestigadorRepositoryI;
-import tpijava.service.LaboratorioService;
-import tpijava.service.ReporteService;
-
+import tpijava.org.laboratorio.domain.Experimento;
+import tpijava.org.laboratorio.domain.ExperimentoFisico;
+import tpijava.org.laboratorio.domain.ExperimentoQuimico;
+import tpijava.org.laboratorio.domain.Investigador;
+import tpijava.org.laboratorio.repository.ExperimentoRepository;
+import tpijava.org.laboratorio.repository.ExperimentoRepositoryI;
+import tpijava.org.laboratorio.repository.InvestigadorRepository;
+import tpijava.org.laboratorio.repository.InvestigadorRepositoryI;
+import tpijava.org.laboratorio.dto.ReporteDTO;
+import tpijava.org.laboratorio.service.*;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-public class LaboratorioChad {
+public class MenuService {
 
-    private final LaboratorioService laboratorioService;
-    private final ReporteService reporteService;
+    private final InvestigadorServiceI investigadorService;
+    private final ExperimentoServiceI experimentoService;
+    private final ReporteServiceI reporteService;
+
     private final Scanner scanner = new Scanner(System.in);
-
-    // Mantener referencia al repository de investigadores para validar existencia desde la UI
     private final InvestigadorRepositoryI investigadorRepo;
 
-    public LaboratorioChad() {
-        // crear los repos y guardarlos en campos para consultas desde la consola
+    public MenuService() {
         this.investigadorRepo = new InvestigadorRepository();
         ExperimentoRepositoryI experimentoRepo = new ExperimentoRepository();
-        this.laboratorioService = new LaboratorioService(investigadorRepo, experimentoRepo);
-        this.reporteService = new ReporteService(investigadorRepo);
-    }
 
-    public static void main(String[] args) {
-        LaboratorioChad app = new LaboratorioChad();
-        app.mostrarMenuPrincipal();
+        this.investigadorService = new InvestigadorService(investigadorRepo);
+        this.experimentoService = new ExperimentoService(experimentoRepo, investigadorRepo);
+        this.reporteService = new ReporteService(investigadorRepo);
     }
 
     public void mostrarMenuPrincipal() {
@@ -113,7 +106,7 @@ public class LaboratorioChad {
         }
 
         try {
-            boolean ok = laboratorioService.registrarInvestigador(nombre, edad);
+            boolean ok = investigadorService.registrarInvestigador(nombre, edad);
             if (ok) {
                 System.out.println("Investigador registrado correctamente.");
             } else {
@@ -151,13 +144,12 @@ public class LaboratorioChad {
             return;
         }
 
-        // Validación/creación interactiva del investigador responsable
         if (!verificarInvestigadorExistente(investigadorNombre)) {
             System.out.println("Operación cancelada: no se pudo asegurar la existencia del investigador.");
             return;
         }
 
-        boolean ok = laboratorioService.registrarExpQuimico(nombre, duracion, resultado, reactivo, investigadorNombre);
+        boolean ok = experimentoService.registrarExpQuimico(nombre, duracion, resultado, reactivo, investigadorNombre);
         if (ok) {
             System.out.println("Experimento químico registrado correctamente.");
         } else {
@@ -197,14 +189,13 @@ public class LaboratorioChad {
             return;
         }
 
-        // Creación de investigadores faltantes
         boolean okFaltantes = verificarInvestigadoresExistentes(nombres);
         if (!okFaltantes) {
             System.out.println("Operación cancelada: no se pudieron asegurar todos los investigadores.");
             return;
         }
 
-        boolean ok = laboratorioService.registrarExpFisico(nombre, duracion, resultado, instrumento, nombres);
+        boolean ok = experimentoService.registrarExpFisico(nombre, duracion, resultado, instrumento, nombres);
         if (ok) {
             System.out.println("Experimento físico registrado correctamente.");
         } else {
@@ -212,12 +203,9 @@ public class LaboratorioChad {
         }
     }
 
-    /**
-     Se usa para que no haya investigadores faltantes al registrar
-     */
     private boolean verificarInvestigadorExistente(String nombre) {
         if (investigadorRepo.buscarPorNombre(nombre).isPresent()) {
-            return true; // ya existe
+            return true;
         }
         System.out.printf("No existe un investigador llamado '%s'. ¿Desea crearlo ahora? (s/n): ", nombre);
         String resp = scanner.nextLine().trim().toLowerCase();
@@ -229,7 +217,7 @@ public class LaboratorioChad {
             System.out.println("Edad inválida. No se creó el investigador.");
             return false;
         }
-        boolean creado = laboratorioService.registrarInvestigador(nombre, edad);
+        boolean creado = investigadorService.registrarInvestigador(nombre, edad);
         if (creado) {
             System.out.println("Investigador creado correctamente.");
             return true;
@@ -239,10 +227,6 @@ public class LaboratorioChad {
         }
     }
 
-    /**
-     Acá busca que todos los investigadores que agregaste al agregar un experimento, existan la lista
-     de investigadores registrados. Si falta alguno, te pregunta si queres crearlo.
-     */
     private boolean verificarInvestigadoresExistentes(List<String> nombres) {
         List<String> faltantes = nombres.stream()
                 .filter(n -> investigadorRepo.buscarPorNombre(n).isEmpty())
@@ -265,7 +249,7 @@ public class LaboratorioChad {
                 System.out.println("Edad inválida. No se creó '" + falt + "'.");
                 return false;
             }
-            boolean creado = laboratorioService.registrarInvestigador(falt, edad);
+            boolean creado = investigadorService.registrarInvestigador(falt, edad);
             if (!creado && investigadorRepo.buscarPorNombre(falt).isEmpty()) {
                 System.out.println("No se pudo crear '" + falt + "'. Operación cancelada.");
                 return false;
@@ -276,12 +260,8 @@ public class LaboratorioChad {
         return true;
     }
 
-    // Aclaración: como no se usa un back o donde guardar los datos
-    // en un archivo o base de datos, cada vez que se corre la app
-    // se pierden los datos. Esto es solo una demo de consola.
-    // Aquí muestra todos los experimentos registrados durante la ejecución actual.
     private void mostrarTodosLosExperimentos() {
-        List<Experimento> experimentoList = laboratorioService.getTodosLosExperimentos();
+        List<Experimento> experimentoList = experimentoService.getTodosLosExperimentos();
         if (experimentoList.isEmpty()) {
             System.out.println("No hay experimentos registrados.");
             return;
@@ -295,12 +275,8 @@ public class LaboratorioChad {
         }
     }
 
-    //Imprime los puntos 4 y 6 del enunciado
-    // Exitos y fallos
-    // Porcentaje de exitos
-    // Promedio de duracion
     private void mostrarEstadisticasGenerales() {
-        ReporteDTO dto = laboratorioService.getEstadisticasGenerales();
+        ReporteDTO dto = experimentoService.getEstadisticasGenerales();
         System.out.println("\n--- Estadísticas generales ---");
         System.out.printf("Total experimentos: %d%n", dto.getTotalExperimentos());
         System.out.printf("Total exitos: %d%n", dto.getTotalExitos());
@@ -310,7 +286,7 @@ public class LaboratorioChad {
     }
 
     private void mostrarExperimentoMayorDuracion() {
-        Experimento mayor = laboratorioService.getExperimentoMayorDuracion();
+        Experimento mayor = experimentoService.getExperimentoMayorDuracion();
         if (mayor == null) {
             System.out.println("No hay experimentos registrados.");
             return;
@@ -321,7 +297,7 @@ public class LaboratorioChad {
     }
 
     private void mostrarInvestigadorConMasExperimentos() {
-        Investigador top = laboratorioService.getInvestigadorConMasExperimentos();
+        Investigador top = investigadorService.getInvestigadorConMasExperimentos();
         if (top == null) {
             System.out.println("No hay investigadores o no hay experimentos.");
             return;
@@ -331,7 +307,6 @@ public class LaboratorioChad {
                 top.getNombre(), top.getEdad(), top.getCantidadExperimentos());
     }
 
-    //En caso de no especificar ruta, usa la de por defecto y la exporta en el sistema de archivos local
     private void gestionarExportarCSV() {
         System.out.print("Ruta de archivo CSV (ej: investigadores.csv). Dejar vacío para la ruta por defecto: ");
         String ruta = scanner.nextLine().trim();

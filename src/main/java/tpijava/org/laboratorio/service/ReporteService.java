@@ -1,7 +1,7 @@
-package tpijava.service;
+package tpijava.org.laboratorio.service;
 
-import tpijava.domain.Investigador;
-import tpijava.repository.InvestigadorRepositoryI;
+import tpijava.org.laboratorio.domain.Investigador;
+import tpijava.org.laboratorio.repository.InvestigadorRepositoryI;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

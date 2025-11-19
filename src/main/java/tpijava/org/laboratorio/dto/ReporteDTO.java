@@ -1,4 +1,4 @@
-package tpijava.dto;
+package tpijava.org.laboratorio.dto;
 
 public class ReporteDTO {
     private double promedioDuracion;

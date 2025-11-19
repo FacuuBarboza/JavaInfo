@@ -1,6 +1,6 @@
-package tpijava.repository;
+package tpijava.org.laboratorio.repository;
 
-import tpijava.domain.Investigador;
+import tpijava.org.laboratorio.domain.Investigador;
 
 import java.util.*;
 

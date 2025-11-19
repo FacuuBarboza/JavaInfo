@@ -1,4 +1,4 @@
-package tpijava.service;
+package tpijava.org.laboratorio.service;
 
 import java.io.IOException;
 

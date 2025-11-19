@@ -1,28 +1,23 @@
-package tpijava.service;
+package tpijava.org.laboratorio.service;
 
-import tpijava.domain.*;
-import tpijava.dto.ReporteDTO;
-import tpijava.repository.ExperimentoRepositoryI;
-import tpijava.repository.InvestigadorRepositoryI;
+import tpijava.org.laboratorio.domain.Experimento;
+import tpijava.org.laboratorio.domain.ExperimentoFisico;
+import tpijava.org.laboratorio.domain.ExperimentoQuimico;
+import tpijava.org.laboratorio.domain.Investigador;
+import tpijava.org.laboratorio.dto.ReporteDTO;
+import tpijava.org.laboratorio.repository.ExperimentoRepositoryI;
+import tpijava.org.laboratorio.repository.InvestigadorRepositoryI;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-public class LaboratorioService implements LaboratorioServiceI {
+public class ExperimentoService implements ExperimentoServiceI {
 
-    private final InvestigadorRepositoryI investigadorRepo;
     private final ExperimentoRepositoryI experimentoRepo;
+    private final InvestigadorRepositoryI investigadorRepo;
 
-    public LaboratorioService(InvestigadorRepositoryI investigadorRepo, ExperimentoRepositoryI experimentoRepo) {
-        this.investigadorRepo = Objects.requireNonNull(investigadorRepo);
+    public ExperimentoService(ExperimentoRepositoryI experimentoRepo, InvestigadorRepositoryI investigadorRepo) {
         this.experimentoRepo = Objects.requireNonNull(experimentoRepo);
-    }
-
-    @Override
-    public boolean registrarInvestigador(String nombre, int edad) {
-        if (nombre == null) throw new IllegalArgumentException("Nombre nulo");
-        Investigador inv = new Investigador(nombre, edad);
-        return investigadorRepo.guardarInvestigador(inv);
+        this.investigadorRepo = Objects.requireNonNull(investigadorRepo);
     }
 
     @Override
@@ -86,13 +81,6 @@ public class LaboratorioService implements LaboratorioServiceI {
     }
 
     @Override
-    public Investigador getInvestigadorConMasExperimentos() {
-        return investigadorRepo.getInvestigadores().stream()
-                .max(Comparator.comparingInt(Investigador::getCantidadExperimentos))
-                .orElse(null);
-    }
-
-    @Override
     public Map<String, Integer> getTotalesExitoFallo() {
         List<Experimento> list = experimentoRepo.getExperimentos();
         int exitos = (int) list.stream().filter(Experimento::isExitoso).count();
@@ -102,4 +90,6 @@ public class LaboratorioService implements LaboratorioServiceI {
         mapa.put("fallos", fallos);
         return mapa;
     }
+
+
 }

@@ -1,4 +1,4 @@
-package tpijava.domain;
+package tpijava.org.laboratorio.domain;
 
 import java.util.Collections;
 import java.util.List;
